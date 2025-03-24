@@ -1,0 +1,146 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #ffeef5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    height: 100vh;
+    background: #ffb6c1;
+    color: white;
+    padding: 20px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar h2 {
+    text-align: center;
+    font-weight: bold;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: left;
+}
+
+.sidebar ul li a {
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar ul li a i {
+    margin-right: 10px;
+}
+
+/* Main Content */
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 28px;
+    color: #ff69b4;
+}
+
+/* Specialty Buttons */
+.specialties {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.specialty-btn {
+    background: #ffb6c1;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.specialty-btn i {
+    font-size: 22px;
+}
+
+.specialty-btn:hover {
+    background: #ff69b4;
+}
+
+/* Doctor Selection */
+#doctors-list {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.doctors {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.doctor-btn {
+    background: white;
+    color: #ff69b4;
+    border: 2px solid #ff69b4;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.doctor-btn:hover {
+    background: #ff69b4;
+    color: white;
+}
+
+/* Floating Appointment Button */
+.appointment-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #ff69b4;
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.appointment-btn:hover {
+    background: #ff1493;
+}
+
+/* Hidden Class */
+.hidden {
+    display: none;
+}

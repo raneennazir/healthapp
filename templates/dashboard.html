@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Healthcare</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dash.css') }}">
+    <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Welcome! 💖</h2>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+                <li><a href="#"><i class="fas fa-user-md"></i> Doctors</a></li>
+                <li><a href="#"><i class="fas fa-heart"></i> Favorites</a></li>
+                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <h1>Pick a Specialist 💉</h1>
+            <div class="specialties">
+                <button class="specialty-btn" onclick="showDoctors('pediatrics')"><i class="fas fa-baby"></i> Pediatrics</button>
+                <button class="specialty-btn" onclick="showDoctors('dentistry')"><i class="fas fa-tooth"></i> Dentistry</button>
+                <button class="specialty-btn" onclick="showDoctors('cardiology')"><i class="fas fa-heartbeat"></i> Cardiology</button>
+                <button class="specialty-btn" onclick="showDoctors('dermatology')"><i class="fas fa-sun"></i> Dermatology</button>
+                <button class="specialty-btn" onclick="showDoctors('neurology')"><i class="fas fa-brain"></i> Neurology</button>
+            </div>
+
+            <!-- Doctor Selection -->
+            <div id="doctors-list" class="hidden">
+                <h2>Choose a Doctor 👩‍⚕️👨‍⚕️</h2>
+                <div class="doctors">
+                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. Rose</button>
+                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. Lily</button>
+                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. James</button>
+                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. William</button>
+                </div>
+            </div>
+
+            <!-- Floating Appointment Button -->
+            <button class="appointment-btn">Book Appointment 💕</button>
+        </div>
+    </div>
+
+    <script>
+        function showDoctors(category) {
+            document.getElementById("doctors-list").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>

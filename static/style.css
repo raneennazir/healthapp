@@ -1,0 +1,76 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(to right, #fce4ec, #f8bbd0);
+}
+
+.login-container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 320px;
+    border: 2px solid #f48fb1;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #fd96bb;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    text-align: left;
+    margin-top: 10px;
+    font-weight: bold;
+    color: #e757a3;
+}
+
+input {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #f48fb1;
+    border-radius: 8px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #c2185b;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px;
+    background: #f06292;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+button:hover {
+    background: #df2e69;
+}
+
+/* Adding some cutesy rounded aesthetics */
+input, button {
+    font-size: 16px;
+}
+
