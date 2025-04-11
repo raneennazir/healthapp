@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Doctors in {{ specialty }}</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      padding: 40px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #d56c96;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+      margin-top: 30px;
+    }
+
+    li {
+      background-color: #ee7ec3;
+      border: 1px solid #e4b5b5;
+      border-radius: 8px;
+      margin: 10px auto;
+      padding: 20px;
+      width: 50%;
+      box-shadow: 0 2px 5px rgba(189, 67, 146, 0.626);
+    }
+
+    span.doctor-name {
+      font-weight: bold;
+      font-size: 18px;
+      color: #c05f86;
+    }
+
+    a {
+      margin-left: 20px;
+      padding: 8px 16px;
+      background-color: #b7d6eb;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #dd8dc9;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Doctors in {{ specialty }}</h2>
+
+  {% if doctors %}
+    <ul>
+      {% for doc in doctors %}
+        <li>
+          <span class="doctor-name">{{ doc.name }}</span><br>
+          <small>Available: {{ doc.available_from }} - {{ doc.available_to }}</small><br>
+          <a href="{{ url_for('booking.book_form', doctor_id=doc.doctor_id) }}">Book Appointment</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No doctors found in this specialty.</p>
+  {% endif %}
+
+</body>
+</html>

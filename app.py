@@ -1,55 +1,80 @@
-from flask import Flask, render_template, request, redirect, session, flash
-import mysql.connector
+from flask import Flask, render_template, request, redirect, session, url_for, flash
+from db_config import get_db_connection
+from booking import booking_bp
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'  # Required for session management
+app.secret_key = 'your_super_secret_key'  # In production, use something even more mysterious ✨
 
-# ✅ MySQL Database Connection
-db = mysql.connector.connect(
-    host="localhost",
-    user="root",  # Change if you have a different username
-    password="Horlicks!1",  # Your MySQL password
-    database="healthcare_db"
-)
-cursor = db.cursor()
+# Register the booking blueprint
+app.register_blueprint(booking_bp)
 
-# ✅ Route for login page
+# Home/Login page
 @app.route('/')
-def login():
+def home():
     return render_template('login.html')
 
-# ✅ Route to handle login form submission
+# Login logic
 @app.route('/login', methods=['POST'])
-def login_post():
+def login():
     username = request.form['username']
     password = request.form['password']
 
-    cursor.execute("SELECT * FROM users WHERE username=%s AND password=SHA2(%s, 256)", (username, password))
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+    query = "SELECT * FROM users WHERE username = %s AND password = SHA2(%s, 256)"
+    cursor.execute(query, (username, password))
     user = cursor.fetchone()
+    conn.close()
 
     if user:
-        session['user'] = username  # Store username in session
-        flash('Login successful!', 'success')
-        return redirect('/dashboard')
+        session['user'] = user['username']
+        session['user_id'] = user['id']
+        return redirect(url_for('booking.dashboard'))  # Boom, into the booking world
     else:
-        flash('Login failed! Invalid credentials.', 'danger')
-        return redirect('/')
+        flash("Invalid credentials. Please try again.")
+        return redirect(url_for('home'))
 
-# ✅ Dashboard Route (After Login)
-@app.route('/dashboard')
-def dashboard():
-    if 'user' in session:
-        return render_template('dashboard.html', username=session['user'])
-    else:
-        flash('You must be logged in to access the dashboard.', 'warning')
-        return redirect('/')
+# Sign-Up Page
+@app.route('/signup-page')
+def signup_page():
+    return render_template('signup.html')
 
-# ✅ Logout Route
+# Sign-Up Logic
+@app.route('/signup', methods=['POST'])
+def signup():
+    name = request.form['name']
+    username = request.form['username']
+    password = request.form['password']
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    # Check if username is already taken
+    cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
+    if cursor.fetchone():
+        flash("Username already taken.")
+        cursor.close()
+        conn.close()
+        return redirect(url_for('signup_page'))
+
+    # Insert new user (we're hashing the password here too)
+    cursor.execute(
+        "INSERT INTO users (username, password) VALUES (%s, SHA2(%s, 256))",
+        (username, password)
+    )
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+    flash("Signup successful!")
+    return redirect(url_for('home'))
+
+# Logout logic
 @app.route('/logout')
 def logout():
-    session.pop('user', None)
-    flash('You have been logged out.', 'info')
-    return redirect('/')
+    session.clear()
+    return redirect(url_for('home'))
 
+# Run it
 if __name__ == '__main__':
     app.run(debug=True)

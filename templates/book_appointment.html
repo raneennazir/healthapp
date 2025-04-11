@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Appointment</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f9fc;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h2 {
+      color: #ed67bc;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: inline-block;
+      background: #fd84d6;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      color: #cc3c92;
+    }
+
+    select {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      width: 100%;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #ef86c3;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #e7afdb;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Book an Appointment with {{ doctor.name }}</h2>
+
+  <form method="post" action="{{ url_for('booking.book_form', doctor_id=doctor.id) }}">
+    <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+
+    <label for="appointment_time">Choose Appointment Time:</label>
+    <select name="appointment_time" required>
+      {% for slot in slots %}
+        <option value="{{ slot.strftime('%Y-%m-%d %H:%M:%S') }}">
+          {{ slot.strftime('%A, %d %B %Y, %I:%M %p') }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Confirm Booking</button>
+  </form>
+
+</body>
+</html>

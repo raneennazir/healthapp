@@ -5,7 +5,111 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Healthcare</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='dash.css') }}">
-    <script src="https://kit.fontawesome.com/yourkitid.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/YOUR-KIT-ID-HERE.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            background-color: #f6f9fc;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #ecacbf;
+            color: white;
+            height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .sidebar ul li {
+            margin: 20px 0;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: rgb(209, 135, 146);
+            font-size: 16px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px;
+        }
+
+        .specialties {
+            margin-bottom: 40px;
+        }
+
+        .specialty-btn {
+            padding: 12px 20px;
+            margin: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background-color: #f6acc2;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .specialty-btn:hover {
+            background-color: #e192a4;
+        }
+
+        .doctors {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .doctor-btn {
+            padding: 12px 18px;
+            background-color: #dc90c5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .doctor-btn:hover {
+            background-color: #e88dbf;
+        }
+
+        .appointment-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background-color: #e570ca;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 18px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -35,22 +139,50 @@
             <!-- Doctor Selection -->
             <div id="doctors-list" class="hidden">
                 <h2>Choose a Doctor 👩‍⚕️👨‍⚕️</h2>
-                <div class="doctors">
-                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. Rose</button>
-                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. Lily</button>
-                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. James</button>
-                    <button class="doctor-btn"><i class="fas fa-user-md"></i> Dr. William</button>
+                <div class="doctors" id="doctor-buttons">
+                    <!-- Doctor buttons appear here -->
                 </div>
             </div>
-
-            <!-- Floating Appointment Button -->
-            <button class="appointment-btn">Book Appointment 💕</button>
         </div>
     </div>
 
+    <!-- Floating Button -->
+    <button class="appointment-btn">Book Appointment 💕</button>
+
     <script>
-        function showDoctors(category) {
+        function showDoctors(specialty) {
             document.getElementById("doctors-list").classList.remove("hidden");
+            const container = document.getElementById("doctor-buttons");
+            container.innerHTML = "Loading...";
+
+            fetch(`/get_doctors/${specialty}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok.");
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    container.innerHTML = "";
+                    if (data.length === 0) {
+                        container.innerHTML = "<p>No doctors found for this specialty </p>";
+                        return;
+                    }
+
+                    data.forEach(doc => {
+                        const btn = document.createElement("button");
+                        btn.className = "doctor-btn";
+                        btn.innerHTML = `<i class="fas fa-user-md"></i> ${doc.name}`;
+                        btn.onclick = () => {
+                            window.location.href = `/book/${doc.id}`;
+                        };
+                        container.appendChild(btn);
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching doctors:", error);
+                    container.innerHTML = "<p>Error loading doctors </p>";
+                });
         }
     </script>
 </body>

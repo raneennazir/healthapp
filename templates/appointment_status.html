@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appointment Status</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0fff4;
+      text-align: center;
+      padding: 50px;
+    }
+
+    h2 {
+      color: #ef7db6;
+      margin-bottom: 20px;
+    }
+
+    .status {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    /* Style for confirmed appointments */
+    .status.confirmed {
+      color: #96dbb3; /* Green */
+    }
+
+    /* Style for rejected/reschedule appointments */
+    .status.rejected {
+      color: #fb8376; /* Red */
+    }
+
+    .time {
+      font-size: 18px;
+      color: #d44763;
+    }
+
+    a {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #f596c4;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+    }
+
+    a:hover {
+      background-color: #f45497;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Appointment {{ status }}</h2>
+
+  <!-- Apply different classes based on the appointment status -->
+  <div class="status {% if status == 'Confirmed' %}confirmed{% else %}rejected{% endif %}">
+    {{ status }}
+  </div>
+
+  <div class="time">Time: {{ time }}</div>
+
+  <a href="{{ url_for('booking.select_specialty') }}">Back to Specialties</a>
+
+</body>
+</html>
