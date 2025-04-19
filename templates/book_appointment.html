@@ -3,74 +3,97 @@
 <head>
   <meta charset="UTF-8">
   <title>Book Appointment</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f7f9fc;
-      text-align: center;
-      padding: 50px;
-    }
-
-    h2 {
-      color: #ed67bc;
-      margin-bottom: 30px;
-    }
-
-    form {
-      display: inline-block;
-      background: #fd84d6;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+      background-color: #fff0f5;
     }
-
-    label {
-      display: block;
-      margin-bottom: 10px;
-      font-weight: bold;
-      color: #cc3c92;
-    }
-
-    select {
+    select, input, button {
       padding: 10px;
-      border: 1px solid #ccc;
+      margin: 10px 0;
       border-radius: 6px;
-      margin-bottom: 20px;
+      border: 1px solid #ccc;
       width: 100%;
+      box-sizing: border-box;
     }
-
     button {
-      padding: 10px 20px;
-      background-color: #ef86c3;
+      background-color: #ff69b4;
       color: white;
       border: none;
-      border-radius: 6px;
       cursor: pointer;
     }
-
     button:hover {
-      background-color: #e7afdb;
+      background-color: #ff85c1;
     }
   </style>
 </head>
 <body>
 
-  <h2>Book an Appointment with {{ doctor.name }}</h2>
+  <h2>Book Appointment with {{ doctor.name }}</h2>
 
-  <form method="post" action="{{ url_for('booking.book_form', doctor_id=doctor.id) }}">
-    <input type="hidden" name="doctor_id" value="{{ doctor.id }}">
+  <form method="post" action="/book/{{ doctor.id }}">
+    <input type="hidden" id="doctor-id" value="{{ doctor.id }}">
 
-    <label for="appointment_time">Choose Appointment Time:</label>
-    <select name="appointment_time" required>
-      {% for slot in slots %}
-        <option value="{{ slot.strftime('%Y-%m-%d %H:%M:%S') }}">
-          {{ slot.strftime('%A, %d %B %Y, %I:%M %p') }}
-        </option>
+    <label>Your Name:</label>
+    <input type="text" name="patient_name" required>
+
+    <label>Select Date:</label>
+    <select name="appointment_date" id="appointment_date" required>
+      <option value="">-- Select a date --</option>
+      {% for date in dates %}
+        <option value="{{ date }}">{{ date }}</option>
       {% endfor %}
     </select>
 
-    <button type="submit">Confirm Booking</button>
+    <label>Select Time Slot:</label>
+    <select name="appointment_time" id="appointment_time" required>
+      <option value="">-- Select a time --</option>
+    </select>
+
+    <button type="submit">Book Appointment</button>
   </form>
 
+  <!-- 🪄 Step 3: JavaScript Magic Begins -->
+  <script>
+    $(document).ready(function () {
+      $('#appointment_date').on('change', function () {
+        const selectedDate = $(this).val();
+        const doctorId = $('#doctor-id').val();
+
+        if (!selectedDate) {
+          $('#appointment_time').html('<option value="">-- Select a time --</option>');
+          return;
+        }
+
+        fetch('/get_slots', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ date: selectedDate, doctor_id: doctorId })
+        })
+        .then(res => res.json())
+        .then(data => {
+          const timeDropdown = $('#appointment_time');
+          timeDropdown.html('<option value="">-- Select a time --</option>');
+
+          if (data.slots && data.slots.length > 0) {
+            data.slots.forEach(slot => {
+              const option = $('<option>').val(slot).text(slot);
+              timeDropdown.append(option);
+            });
+          } else {
+            timeDropdown.html('<option value="">No slots available</option>');
+          }
+        })
+        .catch(err => {
+          console.error('Slot fetch error:', err);
+          $('#appointment_time').html('<option value="">Error loading slots</option>');
+        });
+      });
+    });
+  </script>
 </body>
 </html>

@@ -58,14 +58,13 @@
 
   <h2>Appointment {{ status }}</h2>
 
-  <!-- Apply different classes based on the appointment status -->
   <div class="status {% if status == 'Confirmed' %}confirmed{% else %}rejected{% endif %}">
     {{ status }}
   </div>
 
   <div class="time">Time: {{ time }}</div>
 
-  <a href="{{ url_for('booking.select_specialty') }}">Back to Specialties</a>
+  <a href="{{ url_for('booking.dashboard') }}">Back to Home</a>
 
 </body>
 </html>

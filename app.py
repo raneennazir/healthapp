@@ -3,17 +3,14 @@ from db_config import get_db_connection
 from booking import booking_bp
 
 app = Flask(__name__)
-app.secret_key = 'your_super_secret_key'  # In production, use something even more mysterious ✨
+app.secret_key = 'your_super_secret_key' 
 
-# Register the booking blueprint
 app.register_blueprint(booking_bp)
 
-# Home/Login page
 @app.route('/')
 def home():
     return render_template('login.html')
 
-# Login logic
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
@@ -29,7 +26,7 @@ def login():
     if user:
         session['user'] = user['username']
         session['user_id'] = user['id']
-        return redirect(url_for('booking.dashboard'))  # Boom, into the booking world
+        return redirect(url_for('booking.dashboard')) 
     else:
         flash("Invalid credentials. Please try again.")
         return redirect(url_for('home'))
@@ -57,7 +54,6 @@ def signup():
         conn.close()
         return redirect(url_for('signup_page'))
 
-    # Insert new user (we're hashing the password here too)
     cursor.execute(
         "INSERT INTO users (username, password) VALUES (%s, SHA2(%s, 256))",
         (username, password)
@@ -75,6 +71,5 @@ def logout():
     session.clear()
     return redirect(url_for('home'))
 
-# Run it
 if __name__ == '__main__':
     app.run(debug=True)
