@@ -1,40 +1,39 @@
 pipeline {
     agent any
 
+    environment {
+        DOCKER_COMPOSE_PROJECT_NAME = 'healthapp'
+    }
+
     stages {
         stage('Checkout') {
             steps {
-                echo 'Checking out code...'
-                checkout([ 
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/main']], 
-                    extensions: [], 
-                    userRemoteConfigs: [[ 
-                        url: 'https://github.com/raneennazir/healthapp.git', 
-                        credentialsId: 'todoid' 
-                    ]] 
+                echo ' Checking out your legendary code...'
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    extensions: [],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/raneennazir/healthapp.git',
+                        credentialsId: 'todoid' // Replace with your GitHub token ID
+                    ]]
                 ])
             }
         }
 
         stage('Build') {
             steps {
-                echo 'Building Docker Compose services...'
-                bat 'docker-compose -p todolist1 build'
+                echo ' Building Docker services...'
+                script {
+                    if (isUnix()) {
+                        sh "docker-compose -p ${DOCKER_COMPOSE_PROJECT_NAME} build"
+                    } else {
+                        bat "docker-compose -p %DOCKER_COMPOSE_PROJECT_NAME% build"
+                    }
+                }
             }
         }
 
-        stage('Run Tests') {
+        stage('Test') {
             steps {
-                echo 'Skipping tests for now...'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the application using Docker Compose...'
-                bat 'docker-compose -p todolist1 up -d'
-            }
-        }
-    }
-}
+                echo ' Running tests

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: healthapp_backend
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_NAME=healthcare_db
+      - DB_USER=root
+      - DB_PASSWORD=root
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - .:/app
+
+  db:
+    image: mysql:8.0
+    container_name: healthapp_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: healthcare_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
+
+volumes:
+  db_data:
