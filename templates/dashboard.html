@@ -116,12 +116,13 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h2>Welcome! </h2>
+            <div class="user-info">
+                <p>Hello, {{ session['username'] }}!</p>
+            </div>            
             <ul>
-                <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-                <li><a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
-                <li><a href="#"><i class="fas fa-user-md"></i> Doctors</a></li>
-                <li><a href="#"><i class="fas fa-heart"></i> Favorites</a></li>
-                <li><a href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+
+                <li><a href="{{ url_for('my_appointments') }}"><i class="fas fa-calendar-check"></i> My Appointments</a></li>
+                <li><a href="{{ url_for('logout') }}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>
         </div>
 
@@ -145,9 +146,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Floating Button -->
-    <button class="appointment-btn">Book Appointment </button>
 
     <script>
         function showDoctors(specialty) {

@@ -14,6 +14,7 @@ def home():
 @app.route('/login', methods=['POST'])
 def login():
     username = request.form['username']
+    session['username'] = username
     password = request.form['password']
 
     conn = get_db_connection()
@@ -64,6 +65,31 @@ def signup():
 
     flash("Signup successful!")
     return redirect(url_for('home'))
+
+@app.route('/my_appointments')
+def my_appointments():
+    # Make sure user is logged in
+    if 'username' not in session:
+        return redirect(url_for('login'))
+
+    username = session['username']
+
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    query = """
+        SELECT a.appointment_date, a.appointment_time, d.name AS doctor_name
+        FROM appointment a
+        JOIN doctors d ON a.doctor_id = d.id
+        WHERE a.patient_name = %s
+    """
+    cursor.execute(query, (username,))
+    appointments = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template('my_appointments.html', appointments=appointments)
 
 # Logout logic
 @app.route('/logout')

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Appointments</title>
+    <style>
+        body {
+            background-color: #f0bbe5f7;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #cc3399;
+        }
+        .appointment {
+            background-color: #ffffff;
+            border: 2px solid #cc3399;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px auto;
+            width: 60%;
+            box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>My Appointments 💼</h1>
+
+    {% if appointments %}
+        {% for app in appointments %}
+        <div class="appointment">
+            <p><strong>Doctor:</strong> {{ app.doctor_name }}</p>
+            <p><strong>Date:</strong> {{ app.appointment_date }}</p>
+            <p><strong>Time:</strong> {{ app.appointment_time }}</p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No appointments yet! 👀</p>
+    {% endif %}
+</body>
+</html>

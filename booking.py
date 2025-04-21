@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash
+from flask import Blueprint, render_template, request, jsonify, redirect, url_for, flash,session
 from db_config import get_db_connection
 from datetime import datetime, timedelta
 from datetime import datetime, time
@@ -8,6 +8,7 @@ booking_bp = Blueprint('booking', __name__)
 # Route: Serve the dashboard page
 @booking_bp.route('/dashboard')
 def dashboard():
+    print("Session username:", session.get('username'))
     return render_template('dashboard.html')
 
 # Route: Return doctors in JSON format for AJAX calls
