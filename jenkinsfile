@@ -15,7 +15,7 @@ pipeline {
                     extensions: [],
                     userRemoteConfigs: [[
                         url: 'https://github.com/raneennazir/healthapp.git',
-                        credentialsId: 'todoid' // Replace with your GitHub token ID
+                        credentialsId: 'healthapp' // Replace with your GitHub token ID
                     ]]
                 ])
             }
