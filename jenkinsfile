@@ -48,17 +48,17 @@ pipeline {
             }
         }
         stage('Deploy') {
-    steps {
-        echo 'Starting Docker services...'
-        script {
-            if (isUnix()) {
-                sh 'docker-compose -p healthapp up -d'
-            } else {
-                bat 'docker-compose -p healthapp up -d'
+            steps {
+                echo 'Starting Docker services...'
+                script {
+                    if (isUnix()) {
+                        sh 'docker-compose -p healthapp up -d'
+                       } else {
+                     bat 'docker-compose -p healthapp up -d'
+                    }
+                }
             }
         }
-    }
-}
 
         stage('Test') {
             steps {

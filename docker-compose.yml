@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: healthapp_backend
     ports:
-      - "5000:5000"
+      - "3307:3306"
     environment:
       - FLASK_ENV=development
       - DB_HOST=db
